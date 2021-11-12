@@ -9,9 +9,29 @@ class matrix:
                     raise unequalDimensions
             self.data = mtrx
             self.shape = (len(mtrx),len(mtrx[0]))
+            self.data = mtrx
         except(unequalDimensions):
-            print('Not all your vectors are the same length')
-        self.data = mtrx
+            print('Not all vectors are the same length')
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, key):
+        if type(key) == int:
+            return self.data[key]
+        if(type(key) == (list or tuple)):
+            try:
+                if(len(key) != 2):
+                    raise wrongLengthInput
+                return self.data[key[0]][key[1]]
+            except(wrongLengthInput):
+                print("expected list or tuple of dimension (x,n)")
+
+    def __repr__(self):
+        return(self.data)
+
+    def __str__(self):
+        return(str(self.data))
 
 class vector:
 
@@ -25,6 +45,8 @@ class vector:
 
     def __getitem__(self, key):
         return self.data[key]
+    def __repr__(self):
+        return(self.data)
 
     def __str__(self):
         return(str(self.data))
@@ -94,10 +116,17 @@ class wrongLength(Error):
     pass
 class unequalDimensions(Error):
     """raised when the vectors are not equal dimensional"""
+    pass
+class wrongLengthInput(Error):
+    """raised when the input is the wrong length"""
 
 test1 = vector([1,2,3])
 test2 = vector([4,5,6])
 
-test3 = test1.project(test2)
+test3 = test1
 
-print((test3))
+print(len(test3))
+
+testm1 = matrix([[1,2],[3,5]])
+
+print(testm1[1][1])
