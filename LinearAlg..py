@@ -2,6 +2,15 @@ import math
 class matrix:
 
     def __init__(self, mtrx):
+        try:
+            x = len(mtrx[0])
+            for i in range(len(mtrx)):
+                if (x!=len(mtrx[i])):
+                    raise unequalDimensions
+            self.data = mtrx
+            self.shape = (len(mtrx),len(mtrx[0]))
+        except(unequalDimensions):
+            print('Not all your vectors are the same length')
         self.data = mtrx
 
 class vector:
@@ -73,12 +82,18 @@ class vector:
         except(wrongLength):
             print("These vectors are two different dimensions. Please input two vectors of the same dimension")
 
+    def to_unit_vecrot(self):
+        x = self.scalarMult(1/self.magnitude)
+        return x
+
 #exceptions
 class Error(Exception):
     """base class for exceptions"""
 class wrongLength(Error):
     """raised when the vectors aren't the dimension"""
     pass
+class unequalDimensions(Error):
+    """raised when the vectors are not equal dimensional"""
 
 test1 = vector([1,2,3])
 test2 = vector([4,5,6])
