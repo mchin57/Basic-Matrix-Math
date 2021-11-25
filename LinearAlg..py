@@ -8,8 +8,10 @@ class matrix:
                 if (x!=len(mtrx[i])):
                     raise unequalDimensions
             self.data = mtrx
+            for i in range(len(self.data)):
+                self.data[i] = vector(mtrx[i])
+            print("constructor", type(self.data[0]))
             self.shape = (len(mtrx),len(mtrx[0]))
-            self.data = mtrx
         except(unequalDimensions):
             print('Not all vectors are the same length')
 
@@ -27,15 +29,47 @@ class matrix:
             except(wrongLengthInput):
                 print("expected list or tuple of dimension (x,n)")
 
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
     def __repr__(self):
         return(self.data)
 
     def __str__(self):
-        return(str(self.data))
+        out = [self.data[0].data]
+        for i in range(1, self.shape[0]):
+            out.append(self.data[i].data)
+        return(str(out))
+
+    def append(self, vec):
+        try:
+            if(len(vec) != self.shape[1]):
+                raise wrongLength
+            self.shape = (self.shape[0] + 1, self.shape[1])
+            self.data.append(vec)
+        except(wrongLength):
+            print("This vector is not the correct length. Expected length: ", self.shape[1], " Given length: ", len(vec))
+
+    def zeros(self,shape):
+        for i in range(shape[1]):
+
+        for i in range(shape[0]):
+            vec = vector([0])
+            for i in range(shape[1]-1):
+                vec.append(0)
+
+    def transpose(self):
+        out = self.data[0].transpose()
+
+        for i in self:
+            out.append(i.transpose())
+
 
 class vector:
 
-    def __init__(self, vec):
+    def __init__(self, vec=None):
+        if vec is None:
+            vec = []
         self.data = vec
         self.size = len(vec)
         self.magnitude = self.getMagnitude()
@@ -45,13 +79,17 @@ class vector:
 
     def __getitem__(self, key):
         return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
     def __repr__(self):
         return(self.data)
 
     def __str__(self):
         return(str(self.data))
 
-    def __append__(self,val):
+    def append(self,val):
         self.data.append(val)
 
     def adder(self,vecB):
@@ -104,9 +142,22 @@ class vector:
         except(wrongLength):
             print("These vectors are two different dimensions. Please input two vectors of the same dimension")
 
-    def to_unit_vecrot(self):
+    def to_unit_vector(self):
         x = self.scalarMult(1/self.magnitude)
         return x
+
+    def transpose(self):
+        vec = vector()
+        for i in range(self.size):
+            element = self.size - i - 1
+            print(element)
+            vec.append(self[element])
+        return vec
+    
+    def zeros(int):
+        x = []
+        for i in range(int):
+            x.append(0)
 
 #exceptions
 class Error(Exception):
@@ -120,13 +171,12 @@ class unequalDimensions(Error):
 class wrongLengthInput(Error):
     """raised when the input is the wrong length"""
 
-test1 = vector([1,2,3])
-test2 = vector([4,5,6])
-
-test3 = test1
-
-print(len(test3))
+x = vector([1,2,3,4,5])
+y = x.transpose()
+print(y)
 
 testm1 = matrix([[1,2],[3,5]])
+print(((testm1)))
+testm1.append([6,7])
 
-print(testm1[1][1])
+#print(testm1)
